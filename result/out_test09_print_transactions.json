@@ -1,1 +1,95 @@
-[ ]
+[ {
+  "command" : "printUsers",
+  "output" : [ {
+    "firstName" : "Laurie",
+    "lastName" : "Johnson",
+    "email" : "Laurie_Johnson@gmail.us",
+    "accounts" : [ {
+      "balance" : 3500.0,
+      "currency" : "USD",
+      "type" : "classic",
+      "cards" : [ ],
+      "IBAN" : "RO58POOB7344468893732422"
+    } ]
+  }, {
+    "firstName" : "Alicia",
+    "lastName" : "Stafford",
+    "email" : "Alicia_Stafford@gmail.us",
+    "accounts" : [ {
+      "balance" : 813.0,
+      "currency" : "USD",
+      "type" : "classic",
+      "cards" : [ ],
+      "IBAN" : "RO69POOB6209498372540635"
+    } ]
+  }, {
+    "firstName" : "Denis",
+    "lastName" : "Cousin",
+    "email" : "Denis_Cousin@hotmail.fr",
+    "accounts" : [ {
+      "balance" : 29.0,
+      "currency" : "EUR",
+      "type" : "classic",
+      "cards" : [ ],
+      "IBAN" : "RO90POOB5450777208072365"
+    } ]
+  } ],
+  "timestamp" : 10
+}, {
+  "command" : "printTransactions",
+  "output" : [ {
+    "timestamp" : 1,
+    "description" : "New account created"
+  }, {
+    "timestamp" : 11,
+    "description" : "Miscellaneous online expenses",
+    "senderIBAN" : "RO58POOB7344468893732422",
+    "receiverIBAN" : "RO69POOB6209498372540635",
+    "amount" : "109.0 USD",
+    "transferType" : "sent"
+  } ],
+  "timestamp" : 14
+}, {
+  "command" : "printUsers",
+  "output" : [ {
+    "firstName" : "Laurie",
+    "lastName" : "Johnson",
+    "email" : "Laurie_Johnson@gmail.us",
+    "accounts" : [ {
+      "balance" : 3283.0,
+      "currency" : "USD",
+      "type" : "classic",
+      "cards" : [ ],
+      "IBAN" : "RO58POOB7344468893732422"
+    } ]
+  }, {
+    "firstName" : "Alicia",
+    "lastName" : "Stafford",
+    "email" : "Alicia_Stafford@gmail.us",
+    "accounts" : [ {
+      "balance" : 922.0,
+      "currency" : "USD",
+      "type" : "classic",
+      "cards" : [ ],
+      "IBAN" : "RO69POOB6209498372540635"
+    } ]
+  }, {
+    "firstName" : "Denis",
+    "lastName" : "Cousin",
+    "email" : "Denis_Cousin@hotmail.fr",
+    "accounts" : [ {
+      "balance" : 29.0,
+      "currency" : "EUR",
+      "type" : "classic",
+      "cards" : [ ],
+      "IBAN" : "RO90POOB5450777208072365"
+    }, {
+      "balance" : 283.4,
+      "currency" : "EUR",
+      "type" : "savings",
+      "cards" : [ ],
+      "IBAN" : "RO65POOB8944016386845896"
+    } ]
+  } ],
+  "timestamp" : 19
+} ]

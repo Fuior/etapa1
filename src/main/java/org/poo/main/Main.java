@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.poo.checker.Checker;
 import org.poo.checker.CheckerConstants;
+import org.poo.core.CommandProcessor;
 import org.poo.fileio.ObjectInput;
 
 import java.io.File;
@@ -92,6 +93,9 @@ public final class Main {
          * output.add(objectNode);
          *
          */
+
+        CommandProcessor commandProcessor = new CommandProcessor();
+        commandProcessor.execute(inputData, objectMapper, output);
 
         ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
         objectWriter.writeValue(new File(filePath2), output);
