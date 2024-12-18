@@ -1,11 +1,11 @@
 package org.poo.models;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class SuccessfulDelete {
     private final String success = "Account deleted";
-    private int timestamp;
+    private final int timestamp;
 
     public SuccessfulDelete(int timestamp) {
         this.timestamp = timestamp;

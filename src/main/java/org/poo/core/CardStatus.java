@@ -1,6 +1,6 @@
 package org.poo.core;
 
-import lombok.Data;
+import lombok.Getter;
 import org.poo.models.AccountService;
 import org.poo.models.CardDetails;
 import org.poo.models.Transaction;
@@ -9,22 +9,11 @@ import org.poo.models.UserDetails;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Data
-class Status {
-    private int timestamp;
-    private String description;
-
-    public Status(int timestamp, String description) {
-        this.timestamp = timestamp;
-        this.description = description;
-    }
-}
-
-@Data
+@Getter
 public class CardStatus {
     private final String command = "checkCardStatus";
-    private Status output;
-    private int timestamp;
+    private Transaction output;
+    private final int timestamp;
 
     public CardStatus(int timestamp) {
         this.timestamp = timestamp;
@@ -84,9 +73,9 @@ public class CardStatus {
         CardDetails card = findCard(cardNumber, users, error, timestamp);
 
         if (card == null) {
-            output = new Status(timestamp, "Card not found");
+            output = new Transaction(timestamp, "Card not found");
         } else {
-            output = new Status(timestamp, card.getCardStatus());
+            output = new Transaction(timestamp, card.getCardStatus());
         }
 
         return error.get();

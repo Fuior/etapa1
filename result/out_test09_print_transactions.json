@@ -5,33 +5,33 @@
     "lastName" : "Johnson",
     "email" : "Laurie_Johnson@gmail.us",
     "accounts" : [ {
+      "IBAN" : "RO58POOB7344468893732422",
       "balance" : 3500.0,
       "currency" : "USD",
       "type" : "classic",
-      "cards" : [ ],
-      "IBAN" : "RO58POOB7344468893732422"
+      "cards" : [ ]
     } ]
   }, {
     "firstName" : "Alicia",
     "lastName" : "Stafford",
     "email" : "Alicia_Stafford@gmail.us",
     "accounts" : [ {
+      "IBAN" : "RO69POOB6209498372540635",
       "balance" : 813.0,
       "currency" : "USD",
       "type" : "classic",
-      "cards" : [ ],
-      "IBAN" : "RO69POOB6209498372540635"
+      "cards" : [ ]
     } ]
   }, {
     "firstName" : "Denis",
     "lastName" : "Cousin",
     "email" : "Denis_Cousin@hotmail.fr",
     "accounts" : [ {
+      "IBAN" : "RO90POOB5450777208072365",
       "balance" : 29.0,
       "currency" : "EUR",
       "type" : "classic",
-      "cards" : [ ],
-      "IBAN" : "RO90POOB5450777208072365"
+      "cards" : [ ]
     } ]
   } ],
   "timestamp" : 10
@@ -56,39 +56,39 @@
     "lastName" : "Johnson",
     "email" : "Laurie_Johnson@gmail.us",
     "accounts" : [ {
+      "IBAN" : "RO58POOB7344468893732422",
       "balance" : 3283.0,
       "currency" : "USD",
       "type" : "classic",
-      "cards" : [ ],
-      "IBAN" : "RO58POOB7344468893732422"
+      "cards" : [ ]
     } ]
   }, {
     "firstName" : "Alicia",
     "lastName" : "Stafford",
     "email" : "Alicia_Stafford@gmail.us",
     "accounts" : [ {
+      "IBAN" : "RO69POOB6209498372540635",
       "balance" : 922.0,
       "currency" : "USD",
       "type" : "classic",
-      "cards" : [ ],
-      "IBAN" : "RO69POOB6209498372540635"
+      "cards" : [ ]
     } ]
   }, {
     "firstName" : "Denis",
     "lastName" : "Cousin",
     "email" : "Denis_Cousin@hotmail.fr",
     "accounts" : [ {
+      "IBAN" : "RO90POOB5450777208072365",
       "balance" : 29.0,
       "currency" : "EUR",
       "type" : "classic",
-      "cards" : [ ],
-      "IBAN" : "RO90POOB5450777208072365"
+      "cards" : [ ]
     }, {
+      "IBAN" : "RO65POOB8944016386845896",
       "balance" : 283.4,
       "currency" : "EUR",
       "type" : "savings",
-      "cards" : [ ],
-      "IBAN" : "RO65POOB8944016386845896"
+      "cards" : [ ]
     } ]
   } ],
   "timestamp" : 19

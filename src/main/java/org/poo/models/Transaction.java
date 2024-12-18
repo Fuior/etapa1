@@ -1,11 +1,11 @@
 package org.poo.models;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class Transaction {
-    private int timestamp;
-    private String description;
+    private final int timestamp;
+    private final String description;
 
     public Transaction(int timestamp, String description) {
         this.timestamp = timestamp;

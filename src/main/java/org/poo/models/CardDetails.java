@@ -1,8 +1,10 @@
 package org.poo.models;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class CardDetails {
     private String cardNumber;
     private String type;

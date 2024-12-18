@@ -6,10 +6,10 @@ import java.util.List;
 
 @Getter
 public class SplitPaymentError extends Transaction {
-    private String currency;
-    private double amount;
-    private List<String> involvedAccounts;
-    private String error;
+    private final String currency;
+    private final double amount;
+    private final List<String> involvedAccounts;
+    private final String error;
 
 
     public SplitPaymentError(int timestamp, String description,

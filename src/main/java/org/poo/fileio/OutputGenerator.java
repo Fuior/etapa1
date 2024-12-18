@@ -35,10 +35,10 @@ public class OutputGenerator {
 
         for (AccountService account : user.getBankAccounts()) {
             accounts.add(new AccountOutput(account.getIBAN(),
-                    account.getBalance(),
-                    account.getCurrency(),
-                    account.getAccountType(),
-                    createCardsOutput(account)));
+                        account.getBalance(),
+                        account.getCurrency(),
+                        account.getAccountType(),
+                        createCardsOutput(account)));
         }
 
         return accounts;
@@ -47,9 +47,9 @@ public class OutputGenerator {
     public void createUsersOutput(ArrayList<UserDetails> users) {
         for (UserDetails user : users) {
             output.add(new UserOutput(user.getUserInput().getFirstName(),
-                    user.getUserInput().getLastName(),
-                    user.getUserInput().getEmail(),
-                    createAccountsOutput(user)));
+                        user.getUserInput().getLastName(),
+                        user.getUserInput().getEmail(),
+                        createAccountsOutput(user)));
         }
     }
 }

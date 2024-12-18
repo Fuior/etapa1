@@ -1,24 +1,24 @@
 package org.poo.fileio;
 
-import lombok.Data;
-import org.poo.core.BankHandler;
+import lombok.Getter;
+import org.poo.core.BankRepository;
 import org.poo.models.Transaction;
 import org.poo.models.UserDetails;
 
 import java.util.ArrayList;
 
-@Data
+@Getter
 public class TransactionsOutput {
     private final String command = "printTransactions";
     private ArrayList<Transaction> output;
-    private int timestamp;
+    private final int timestamp;
 
     public TransactionsOutput(int timestamp) {
         this.timestamp = timestamp;
     }
 
-    public void setOutput(BankHandler bank, String email) {
-        UserDetails user = bank.findUser(email);
+    public void setOutput(BankRepository bankRepository, String email) {
+        UserDetails user = bankRepository.findUser(email);
         output = user.getTransactions();
     }
 }

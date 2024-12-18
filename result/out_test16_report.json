@@ -5,34 +5,34 @@
     "lastName" : "Dumitrescu",
     "email" : "Emanuel_Dumitrescu@gmail.ro",
     "accounts" : [ {
+      "IBAN" : "RO58POOB7344468893732422",
       "balance" : 838.0,
       "currency" : "RON",
       "type" : "classic",
-      "cards" : [ ],
-      "IBAN" : "RO58POOB7344468893732422"
+      "cards" : [ ]
     }, {
+      "IBAN" : "RO69POOB6209498372540635",
       "balance" : 216.0,
       "currency" : "RON",
       "type" : "classic",
-      "cards" : [ ],
-      "IBAN" : "RO69POOB6209498372540635"
+      "cards" : [ ]
     } ]
   }, {
     "firstName" : "Jacques",
     "lastName" : "Loiseau",
     "email" : "Jacques_Loiseau@gmail.fr",
     "accounts" : [ {
+      "IBAN" : "RO90POOB5450777208072365",
       "balance" : 791.0,
       "currency" : "EUR",
       "type" : "classic",
-      "cards" : [ ],
-      "IBAN" : "RO90POOB5450777208072365"
+      "cards" : [ ]
     }, {
+      "IBAN" : "RO65POOB8944016386845896",
       "balance" : 586.0,
       "currency" : "EUR",
       "type" : "classic",
-      "cards" : [ ],
-      "IBAN" : "RO65POOB8944016386845896"
+      "cards" : [ ]
     } ]
   } ],
   "timestamp" : 9
@@ -43,37 +43,37 @@
     "lastName" : "Dumitrescu",
     "email" : "Emanuel_Dumitrescu@gmail.ro",
     "accounts" : [ {
+      "IBAN" : "RO58POOB7344468893732422",
       "balance" : 272.5,
       "currency" : "RON",
       "type" : "classic",
       "cards" : [ {
         "cardNumber" : "8207906978464446",
         "status" : "active"
-      } ],
-      "IBAN" : "RO58POOB7344468893732422"
+      } ]
     }, {
+      "IBAN" : "RO69POOB6209498372540635",
       "balance" : 497.0,
       "currency" : "RON",
       "type" : "classic",
-      "cards" : [ ],
-      "IBAN" : "RO69POOB6209498372540635"
+      "cards" : [ ]
     } ]
   }, {
     "firstName" : "Jacques",
     "lastName" : "Loiseau",
     "email" : "Jacques_Loiseau@gmail.fr",
     "accounts" : [ {
+      "IBAN" : "RO90POOB5450777208072365",
       "balance" : 791.0,
       "currency" : "EUR",
       "type" : "classic",
-      "cards" : [ ],
-      "IBAN" : "RO90POOB5450777208072365"
+      "cards" : [ ]
     }, {
+      "IBAN" : "RO65POOB8944016386845896",
       "balance" : 586.0,
       "currency" : "EUR",
       "type" : "classic",
-      "cards" : [ ],
-      "IBAN" : "RO65POOB8944016386845896"
+      "cards" : [ ]
     } ]
   } ],
   "timestamp" : 14

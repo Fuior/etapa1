@@ -1,12 +1,14 @@
 package org.poo.fileio;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class DeleteAccountOutput<T> {
     private final String command = "deleteAccount";
     private T output;
-    private int timestamp;
+    private final int timestamp;
 
     public DeleteAccountOutput(int timestamp) {
         this.timestamp = timestamp;

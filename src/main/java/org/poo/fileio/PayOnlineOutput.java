@@ -1,25 +1,15 @@
 package org.poo.fileio;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
-class Result {
-    private final String description = "Card not found";
-    private int timestamp;
-
-    public Result(int timestamp) {
-        this.timestamp = timestamp;
-    }
-}
-
-@Data
+@Getter
 public class PayOnlineOutput {
     private final String command = "payOnline";
-    private Result output;
-    private int timestamp;
+    private final ErrorOutput output;
+    private final int timestamp;
 
     public PayOnlineOutput(int timestamp) {
-        this.output = new Result(timestamp);
+        this.output = new ErrorOutput("Card not found", timestamp);
         this.timestamp = timestamp;
     }
 }

@@ -6,9 +6,9 @@ import java.util.List;
 
 @Getter
 public class SplitPaymentFormat extends Transaction {
-    private String currency;
-    private double amount;
-    private List<String> involvedAccounts;
+    private final String currency;
+    private final double amount;
+    private final List<String> involvedAccounts;
 
     public SplitPaymentFormat(int timestamp, String description, String currency,
                               double amount, List<String> involvedAccounts) {

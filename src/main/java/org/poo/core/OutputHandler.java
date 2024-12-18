@@ -2,17 +2,15 @@ package org.poo.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import lombok.Data;
 import org.poo.fileio.*;
 import org.poo.models.FailedDelete;
 import org.poo.models.SuccessfulDelete;
 
-@Data
 public class OutputHandler {
-    private CommandInput commandInput;
-    private BankHandler bank;
-    private ObjectMapper objectMapper;
-    private ArrayNode output;
+    private final CommandInput commandInput;
+    private final BankHandler bank;
+    private final ObjectMapper objectMapper;
+    private final ArrayNode output;
 
     public OutputHandler(CommandInput commandInput, BankHandler bank,
                          ObjectMapper objectMapper, ArrayNode output) {
@@ -24,8 +22,8 @@ public class OutputHandler {
     }
 
     public void printUsers() {
-        OutputGenerator myOutput = new OutputGenerator("printUsers",
-                                                        commandInput.getTimestamp());
+        OutputGenerator myOutput;
+        myOutput = new OutputGenerator("printUsers", commandInput.getTimestamp());
 
         myOutput.createUsersOutput(bank.getUsers());
         output.add(objectMapper.valueToTree(myOutput));
@@ -65,7 +63,7 @@ public class OutputHandler {
 
     public void printTransactions() {
         TransactionsOutput myOutput = new TransactionsOutput(commandInput.getTimestamp());
-        myOutput.setOutput(bank, commandInput.getEmail());
+        myOutput.setOutput(bank.getBankRepository(), commandInput.getEmail());
         output.add(objectMapper.valueToTree(myOutput));
     }
 
@@ -87,7 +85,7 @@ public class OutputHandler {
     }
 
     public void getReport(CommandInput reportDetails) {
-        Report report = bank.getReport(commandInput);
+        Report report = bank.generateReport(commandInput);
 
         if (report == null) {
             ReportErrorOutput myOutput = new ReportErrorOutput(reportDetails.getCommand(),
@@ -101,7 +99,7 @@ public class OutputHandler {
     }
 
     public void getSpendingReport(CommandInput reportDetails) {
-        Report report = bank.getReport(commandInput);
+        Report report = bank.generateReport(commandInput);
 
         if (report == null) {
             ReportErrorOutput myOutput = new ReportErrorOutput(reportDetails.getCommand(),

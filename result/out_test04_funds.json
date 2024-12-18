@@ -24,28 +24,28 @@
     "lastName" : "Nicolas",
     "email" : "Chantal_Nicolas@yahoo.fr",
     "accounts" : [ {
+      "IBAN" : "RO58POOB7344468893732422",
       "balance" : 0.0,
       "currency" : "EUR",
       "type" : "classic",
       "cards" : [ {
         "cardNumber" : "8207906978464446",
         "status" : "active"
-      } ],
-      "IBAN" : "RO58POOB7344468893732422"
+      } ]
     } ]
   }, {
     "firstName" : "Brenda",
     "lastName" : "Rivera",
     "email" : "Brenda_Rivera@gmail.us",
     "accounts" : [ {
+      "IBAN" : "RO69POOB6209498372540635",
       "balance" : 0.0,
       "currency" : "USD",
       "type" : "classic",
       "cards" : [ {
         "cardNumber" : "7901879264253296",
         "status" : "active"
-      } ],
-      "IBAN" : "RO69POOB6209498372540635"
+      } ]
     } ]
   }, {
     "firstName" : "Marcel",
@@ -61,28 +61,28 @@
     "lastName" : "Nicolas",
     "email" : "Chantal_Nicolas@yahoo.fr",
     "accounts" : [ {
+      "IBAN" : "RO58POOB7344468893732422",
       "balance" : 572.0,
       "currency" : "EUR",
       "type" : "classic",
       "cards" : [ {
         "cardNumber" : "8207906978464446",
         "status" : "active"
-      } ],
-      "IBAN" : "RO58POOB7344468893732422"
+      } ]
     } ]
   }, {
     "firstName" : "Brenda",
     "lastName" : "Rivera",
     "email" : "Brenda_Rivera@gmail.us",
     "accounts" : [ {
+      "IBAN" : "RO69POOB6209498372540635",
       "balance" : 0.0,
       "currency" : "USD",
       "type" : "classic",
       "cards" : [ {
         "cardNumber" : "7901879264253296",
         "status" : "active"
-      } ],
-      "IBAN" : "RO69POOB6209498372540635"
+      } ]
     } ]
   }, {
     "firstName" : "Marcel",
@@ -98,39 +98,39 @@
     "lastName" : "Nicolas",
     "email" : "Chantal_Nicolas@yahoo.fr",
     "accounts" : [ {
+      "IBAN" : "RO58POOB7344468893732422",
       "balance" : 572.0,
       "currency" : "EUR",
       "type" : "classic",
       "cards" : [ {
         "cardNumber" : "8207906978464446",
         "status" : "active"
-      } ],
-      "IBAN" : "RO58POOB7344468893732422"
+      } ]
     } ]
   }, {
     "firstName" : "Brenda",
     "lastName" : "Rivera",
     "email" : "Brenda_Rivera@gmail.us",
     "accounts" : [ {
+      "IBAN" : "RO69POOB6209498372540635",
       "balance" : 0.0,
       "currency" : "USD",
       "type" : "classic",
       "cards" : [ {
         "cardNumber" : "7901879264253296",
         "status" : "active"
-      } ],
-      "IBAN" : "RO69POOB6209498372540635"
+      } ]
     } ]
   }, {
     "firstName" : "Marcel",
     "lastName" : "Ionita",
     "email" : "Marcel_Ionita@gmail.ro",
     "accounts" : [ {
+      "IBAN" : "RO90POOB5450777208072365",
       "balance" : 557.0,
       "currency" : "RON",
       "type" : "classic",
-      "cards" : [ ],
-      "IBAN" : "RO90POOB5450777208072365"
+      "cards" : [ ]
     } ]
   } ],
   "timestamp" : 13

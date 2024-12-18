@@ -4,8 +4,6 @@ import org.poo.fileio.ExchangeInput;
 
 import java.util.*;
 
-record Pair<K, V>(K key, V value) {}
-
 public class CurrencyExchange {
     private final Map<String, List<Pair<String, Double>>> exchangeGraph;
 
@@ -13,6 +11,8 @@ public class CurrencyExchange {
         exchangeGraph = new HashMap<>();
         buildGraph(exchangeRates);
     }
+
+    private record Pair<K, V>(K key, V value) {}
 
     private void buildGraph(ExchangeInput[] exchangeRates) {
         for (ExchangeInput rate : exchangeRates) {

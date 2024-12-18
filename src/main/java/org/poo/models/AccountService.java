@@ -1,16 +1,17 @@
 package org.poo.models;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.poo.utils.Utils;
 
 import java.util.ArrayList;
 
-@Data
+@Getter
+@Setter
 public class AccountService {
     private String IBAN;
     private double balance;
     private double minBalance;
-    private ArrayList<FundsDetails> fundsHistory;
     private String currency;
     private String accountType;
     private int timestamp;
@@ -22,7 +23,6 @@ public class AccountService {
         this.IBAN = Utils.generateIBAN();
         this.balance = 0;
         this.minBalance = 0;
-        this.fundsHistory = new ArrayList<>();
         this.currency = currency;
         this.accountType = accountType;
         this.timestamp = timestamp;

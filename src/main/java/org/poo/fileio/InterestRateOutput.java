@@ -1,26 +1,17 @@
 package org.poo.fileio;
 
-import lombok.Data;
+import lombok.Getter;
+import org.poo.models.Transaction;
 
-@Data
-class OutputFormat {
-    private int timestamp;
-    private final String description = "This is not a savings account";
-
-    public OutputFormat(int timestamp) {
-        this.timestamp = timestamp;
-    }
-}
-
-@Data
+@Getter
 public class InterestRateOutput {
-    private String command;
-    private OutputFormat output;
-    private int timestamp;
+    private final String command;
+    private final Transaction output;
+    private final int timestamp;
 
     public InterestRateOutput(String command, int timestamp) {
         this.command = command;
-        this.output = new OutputFormat(timestamp);
+        this.output = new Transaction(timestamp, "This is not a savings account");
         this.timestamp = timestamp;
     }
 }

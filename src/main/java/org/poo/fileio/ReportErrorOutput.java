@@ -1,26 +1,16 @@
 package org.poo.fileio;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
-class ErrorOutput {
-    private final String description = "Account not found";
-    private int timestamp;
-
-    public ErrorOutput(int timestamp) {
-        this.timestamp = timestamp;
-    }
-}
-
-@Data
+@Getter
 public class ReportErrorOutput {
-    private String command;
-    private ErrorOutput output;
-    private int timestamp;
+    private final String command;
+    private final ErrorOutput output;
+    private final int timestamp;
 
     public ReportErrorOutput(String command, int timestamp) {
         this.command = command;
-        this.output = new ErrorOutput(timestamp);
+        this.output = new ErrorOutput("Account not found", timestamp);
         this.timestamp = timestamp;
     }
 }

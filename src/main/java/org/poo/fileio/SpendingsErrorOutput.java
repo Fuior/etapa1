@@ -1,17 +1,14 @@
 package org.poo.fileio;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
-class Error {
-    private final String error = "This kind of report is not supported for a saving account";
-}
-
-@Data
+@Getter
 public class SpendingsErrorOutput {
     private final String command = "spendingsReport";
-    private final Error output = new Error();
-    private int timestamp;
+    private final Error output = new Error("This kind of report is not supported for a saving account");
+    private final int timestamp;
+
+    private record Error(String error) {}
 
     public SpendingsErrorOutput(int timestamp) {
         this.timestamp = timestamp;
