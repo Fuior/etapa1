@@ -9,33 +9,48 @@ import java.util.ArrayList;
 
 @Data
 public class TransactionFormat {
+
     @JsonProperty("IBAN")
-    private String IBAN;
+    private String iban;
     private double balance;
     private String currency;
     protected ArrayList<Transaction> transactions;
 
-    public TransactionFormat(AccountService account) {
-       this.IBAN = account.getIBAN();
-       this.balance = account.getBalance();
-       this.currency = account.getCurrency();
-       this.transactions = new ArrayList<>();
+    public TransactionFormat(final AccountService account) {
+
+        this.iban = account.getIban();
+        this.balance = account.getBalance();
+        this.currency = account.getCurrency();
+        this.transactions = new ArrayList<>();
     }
 
-    public void getTransactions(ArrayList<? extends Transaction> transactions,
-                                int startTimestamp, int endTimestamp) {
+    /**
+     * Aceasta metoda creeaza o lista cu tranzactiile unui user,
+     * fara duplicate, care se afla intr-un interval dat
+     *
+     * @param transactionsList lista initiala de tranzactii
+     * @param startTimestamp timpul de inceput al intervalului
+     * @param endTimestamp timpul de sfarsit al intervalului
+     */
+    public void getTransactions(final ArrayList<? extends Transaction> transactionsList,
+                                final int startTimestamp, final int endTimestamp) {
 
-        for (Transaction t : transactions) {
-            if (t.getTimestamp() < startTimestamp)
+        for (Transaction t : transactionsList) {
+
+            if (t.getTimestamp() < startTimestamp) {
                 continue;
+            }
 
-            if (t.getTimestamp() > endTimestamp)
+            if (t.getTimestamp() > endTimestamp) {
                 return;
+            }
 
             if (this.transactions.isEmpty()) {
+
                 this.transactions.add(t);
-            } else if (!(this.transactions.getLast().getDescription().equals(t.getDescription()) &&
-                        (this.getTransactions().getLast().getTimestamp() == t.getTimestamp()))) {
+
+            } else if (!(this.transactions.getLast().getDescription().equals(t.getDescription())
+                        && (this.getTransactions().getLast().getTimestamp() == t.getTimestamp()))) {
 
                 this.transactions.add(t);
             }

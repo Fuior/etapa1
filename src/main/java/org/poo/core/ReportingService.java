@@ -6,15 +6,23 @@ import org.poo.models.UserDetails;
 
 public class ReportingService extends BankRepositoryEntity {
 
-    public ReportingService(BankRepository bankRepository) {
+    public ReportingService(final BankRepository bankRepository) {
         super(bankRepository);
     }
 
-    public Report generateReport(CommandInput reportDetails) {
+    /**
+     * Aceasta metoda genereaza un report de cheltuieli
+     *
+     * @param reportDetails detaliile contului pentru care se genereaza reportul
+     * @return reportul creat
+     */
+    public Report generateReport(final CommandInput reportDetails) {
+
         AccountService account = bankRepository.findAccountByIBAN(reportDetails.getAccount());
 
-        if (account == null)
+        if (account == null) {
             return null;
+        }
 
         UserDetails user = bankRepository.findUserByAccount(account);
 

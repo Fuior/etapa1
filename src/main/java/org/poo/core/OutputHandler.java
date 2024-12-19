@@ -2,18 +2,27 @@ package org.poo.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import org.poo.fileio.*;
+import org.poo.fileio.CommandInput;
+import org.poo.fileio.DeleteAccountOutput;
+import org.poo.fileio.ExchangeInput;
+import org.poo.fileio.InterestRateOutput;
+import org.poo.fileio.OutputGenerator;
+import org.poo.fileio.PayOnlineOutput;
+import org.poo.fileio.ReportErrorOutput;
+import org.poo.fileio.SpendingsErrorOutput;
+import org.poo.fileio.TransactionsOutput;
 import org.poo.models.FailedDelete;
 import org.poo.models.SuccessfulDelete;
 
 public class OutputHandler {
-    private final CommandInput commandInput;
-    private final BankHandler bank;
-    private final ObjectMapper objectMapper;
-    private final ArrayNode output;
 
-    public OutputHandler(CommandInput commandInput, BankHandler bank,
-                         ObjectMapper objectMapper, ArrayNode output) {
+    private CommandInput commandInput;
+    private BankHandler bank;
+    private ObjectMapper objectMapper;
+    private ArrayNode output;
+
+    public OutputHandler(final CommandInput commandInput, final BankHandler bank,
+                         final ObjectMapper objectMapper, final ArrayNode output) {
 
         this.commandInput = commandInput;
         this.bank = bank;
@@ -21,7 +30,11 @@ public class OutputHandler {
         this.output = output;
     }
 
+    /**
+     * Aceasta metoda afiseaza user-ii.
+     */
     public void printUsers() {
+
         OutputGenerator myOutput;
         myOutput = new OutputGenerator("printUsers", commandInput.getTimestamp());
 
@@ -29,7 +42,12 @@ public class OutputHandler {
         output.add(objectMapper.valueToTree(myOutput));
     }
 
+    /**
+     * Aceasta metoda sterge un cont si genereaza
+     * "outputul" actiunii.
+     */
     public void deleteAccount() {
+
         DeleteAccountOutput<Object> myOutput;
         myOutput = new DeleteAccountOutput<>(commandInput.getTimestamp());
 
@@ -44,30 +62,52 @@ public class OutputHandler {
         output.add(objectMapper.valueToTree(myOutput));
     }
 
-    public void payOnline(ExchangeInput[] exchangeRates) {
+    /**
+     * Aceasta metoda genereaza "outputul" unei plati cu cardul.
+     *
+     * @param exchangeRates cursurile de schimb valutar
+     */
+    public void payOnline(final ExchangeInput[] exchangeRates) {
+
         PayOnlineOutput myOutput = bank.payOnline(commandInput, exchangeRates);
 
-        if (myOutput != null)
+        if (myOutput != null) {
             output.add(objectMapper.valueToTree(myOutput));
+        }
     }
 
+    /**
+     * Aceasta metoda verifica statusul unui card
+     * si genereaza "outputul" aferent.
+     */
     public void checkCardStatus() {
+
         CardStatus myOutput = new CardStatus(commandInput.getTimestamp());
 
         int result = myOutput.checkStatus(commandInput.getTimestamp(),
                 commandInput.getCardNumber(), bank.getUsers());
 
-        if (result == 0)
+        if (result == 0) {
             output.add(objectMapper.valueToTree(myOutput));
+        }
     }
 
+    /**
+     * Aceasta metoda afiseaza tranzactiile unui cont
+     */
     public void printTransactions() {
+
         TransactionsOutput myOutput = new TransactionsOutput(commandInput.getTimestamp());
         myOutput.setOutput(bank.getBankRepository(), commandInput.getEmail());
         output.add(objectMapper.valueToTree(myOutput));
     }
 
+    /**
+     * Aceasta metoda apeleaza metodele aferente si genereaza "outputul"
+     * pentru comenzile "addInterest" si "changeInterestRate".
+     */
     public void interestRate() {
+
         int result;
 
         if (commandInput.getCommand().equals("addInterest")) {
@@ -76,15 +116,23 @@ public class OutputHandler {
             result = bank.changeInterestRate(commandInput);
         }
 
-        if (result == 0)
+        if (result == 0) {
             return;
+        }
 
         InterestRateOutput myOutput = new InterestRateOutput(commandInput.getCommand(),
                                                             commandInput.getTimestamp());
         output.add(objectMapper.valueToTree(myOutput));
     }
 
-    public void getReport(CommandInput reportDetails) {
+    /**
+     * Aceasta metoda genereaza un raport pentru un cont
+     * si "outputul" care se fa afisa in fisierul de iesire.
+     *
+     * @param reportDetails detaliile actiunii
+     */
+    public void getReport(final CommandInput reportDetails) {
+
         Report report = bank.generateReport(commandInput);
 
         if (report == null) {
@@ -94,16 +142,26 @@ public class OutputHandler {
             return;
         }
 
-        if (report.getOutput() != null)
+        if (report.getOutput() != null) {
             output.add(objectMapper.valueToTree(report));
+        }
     }
 
-    public void getSpendingReport(CommandInput reportDetails) {
+    /**
+     * Aceasta metoda genereaza un raport de cheltuieli pentru un cont
+     * si "outputul" care se fa afisa in fisierul de iesire.
+     *
+     * @param reportDetails detaliile actiunii
+     */
+    public void getSpendingReport(final CommandInput reportDetails) {
+
         Report report = bank.generateReport(commandInput);
 
         if (report == null) {
+
             ReportErrorOutput myOutput = new ReportErrorOutput(reportDetails.getCommand(),
                     reportDetails.getTimestamp());
+
             output.add(objectMapper.valueToTree(myOutput));
             return;
         }

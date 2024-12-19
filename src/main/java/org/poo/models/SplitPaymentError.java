@@ -6,19 +6,20 @@ import java.util.List;
 
 @Getter
 public class SplitPaymentError extends Transaction {
-    private final String currency;
-    private final double amount;
-    private final List<String> involvedAccounts;
-    private final String error;
+
+    private String currency;
+    private double amount;
+    private List<String> involvedAccounts;
+    private String error;
 
 
-    public SplitPaymentError(int timestamp, String description,
-                             SplitPaymentFormat paymentInput, String IBAN) {
+    public SplitPaymentError(final int timestamp, final String description,
+                             final SplitPaymentFormat paymentInput, final String iban) {
 
         super(timestamp, description);
         this.currency = paymentInput.getCurrency();
         this.amount = paymentInput.getAmount();
         this.involvedAccounts = paymentInput.getInvolvedAccounts();
-        this.error = "Account " + IBAN + " has insufficient funds for a split payment.";
+        this.error = "Account " + iban + " has insufficient funds for a split payment.";
     }
 }

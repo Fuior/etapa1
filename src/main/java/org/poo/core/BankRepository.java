@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BankRepository {
+
     private static BankRepository instance;
     private final Map<String, UserDetails> userMapByEmail = new HashMap<>();
     private final Map<String, UserDetails> userMapByAccount = new HashMap<>();
@@ -15,70 +16,160 @@ public class BankRepository {
     private final Map<String, AccountService> accountMapByCard = new HashMap<>();
     private final Map<String, CardDetails> cardMap = new HashMap<>();
 
+    /**
+     * Această metodă asigură că este creată o singură instanță a {@code BankRepository}
+     *
+     * @return instanța singleton a {@code BankRepository}
+     */
     public static synchronized BankRepository getInstance() {
-        if (instance == null)
+
+        if (instance == null) {
             instance = new BankRepository();
+        }
 
         return instance;
     }
 
-    public void addUserByEmail(UserDetails user) {
+    /**
+     * Aceasta metoda adauga un user
+     *
+     * @param user user-ul care va fi adaugat
+     */
+    public void addUserByEmail(final UserDetails user) {
         userMapByEmail.put(user.getUserInput().getEmail(), user);
     }
 
-    public void addUserByAccount(UserDetails user, String account) {
+    /**
+     * Aceasta metoda adauga un user
+     *
+     * @param user user-ul care va fi adaugat
+     * @param account contul asociat user-ului
+     */
+    public void addUserByAccount(final UserDetails user, final String account) {
         userMapByAccount.put(account, user);
     }
 
-    public void deleteUser(AccountService account) {
-        userMapByAccount.remove(account.getIBAN());
+    /**
+     * Aceasta metoda sterge un user
+     *
+     * @param account contul asociat user-ului
+     */
+    public void deleteUser(final AccountService account) {
+        userMapByAccount.remove(account.getIban());
     }
 
-    public void addAccount(AccountService account) {
-        accountMap.put(account.getIBAN(), account);
+    /**
+     * Aceasta metoda adauga un cont
+     *
+     * @param account contul care va fi adaugat
+     */
+    public void addAccount(final AccountService account) {
+        accountMap.put(account.getIban(), account);
     }
 
-    public void addAccountByAlias(AccountService account, String alias) {
+    /**
+     * Aceasta metoda adauga un cont
+     *
+     * @param account contul care va fi adaugat
+     * @param alias alias-ul asociat contului
+     */
+    public void addAccountByAlias(final AccountService account, final String alias) {
         accountMap.put(alias, account);
     }
 
-    public void addAccountByCard(AccountService account, CardDetails card) {
+    /**
+     * Aceasta metoda adauga un cont
+     *
+     * @param account contul care va fi adaugat
+     * @param card cardul asociat contului
+     */
+    public void addAccountByCard(final AccountService account, final CardDetails card) {
         accountMapByCard.put(card.getCardNumber(), account);
     }
 
-    public void deleteAccount(String account) {
+    /**
+     * Aceasta metoda sterge un cont
+     *
+     * @param account iban-ul/alias-ul contului
+     */
+    public void deleteAccount(final String account) {
         accountMap.remove(account);
     }
 
-    public void deleteAccountByCard(CardDetails card) {
+    /**
+     * Aceasta metoda sterge un cont
+     *
+     * @param card cardul asociat contului
+     */
+    public void deleteAccountByCard(final CardDetails card) {
         accountMapByCard.remove(card.getCardNumber());
     }
 
-    public void addCard(CardDetails card) {
+    /**
+     * Aceasta metoda adauga un card
+     *
+     * @param card numarul cardului care va fi adaugat
+     */
+    public void addCard(final CardDetails card) {
         cardMap.put(card.getCardNumber(), card);
     }
 
-    public void deleteCard(String cardNumber) {
+    /**
+     * Aceasta metoda sterge un card
+     *
+     * @param cardNumber numarului cardului care trebuie sters
+     */
+    public void deleteCard(final String cardNumber) {
         cardMap.remove(cardNumber);
     }
 
-    public UserDetails findUser(String email) {
+    /**
+     * Aceasta metoda cauta un user dupa un email
+     *
+     * @param email email-ul user-ului
+     * @return user-ul dorit sau null daca nu exista
+     */
+    public UserDetails findUser(final String email) {
         return userMapByEmail.get(email);
     }
 
-    public UserDetails findUserByAccount(AccountService account) {
-        return userMapByAccount.get(account.getIBAN());
+    /**
+     * Aceasta metoda cauta un user dupa un cont
+     *
+     * @param account iban-ul contului asociat user-ului
+     * @return user-ul dorit sau null daca nu exista
+     */
+    public UserDetails findUserByAccount(final AccountService account) {
+        return userMapByAccount.get(account.getIban());
     }
 
-    public AccountService findAccountByIBAN(String iban) {
+    /**
+     * Aceasta metoda cauta un cont dupa un iban
+     *
+     * @param iban iban-ul contului
+     * @return contul dorit sau null daca nu exista
+     */
+    public AccountService findAccountByIBAN(final String iban) {
         return accountMap.get(iban);
     }
 
-    public AccountService findAccountByCard(String cardNumber) {
+    /**
+     * Aceasta metoda cauta un cont dupa un card
+     *
+     * @param cardNumber numarul cardului asociat contului
+     * @return contul dorit sau null daca nu exista
+     */
+    public AccountService findAccountByCard(final String cardNumber) {
         return accountMapByCard.get(cardNumber);
     }
 
-    public CardDetails findCardByNumber(String cardNumber) {
+    /**
+     * Aceasta metoda cauta un card dupa numarului lui.
+     *
+     * @param cardNumber este numarul cardului
+     * @return cardul dorit sau null daca nu exista
+     */
+    public CardDetails findCardByNumber(final String cardNumber) {
         return cardMap.get(cardNumber);
     }
 }

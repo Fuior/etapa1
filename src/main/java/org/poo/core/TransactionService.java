@@ -3,29 +3,43 @@ package org.poo.core;
 import org.poo.fileio.CommandInput;
 import org.poo.fileio.ExchangeInput;
 import org.poo.fileio.PayOnlineOutput;
-import org.poo.models.*;
+import org.poo.models.AccountService;
+import org.poo.models.CardDetails;
+import org.poo.models.CardPaymentFormat;
+import org.poo.models.ClassicAccount;
+import org.poo.models.MoneyTransfer;
+import org.poo.models.SplitPaymentError;
+import org.poo.models.SplitPaymentFormat;
+import org.poo.models.Transaction;
+import org.poo.models.UserDetails;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TransactionService extends BankRepositoryEntity {
+public final class TransactionService extends BankRepositoryEntity {
+
     private final CardServiceManager cardServiceManager;
 
-    public TransactionService(BankRepository bankRepository, CardServiceManager cardServiceManager) {
+    public TransactionService(final BankRepository bankRepository,
+                              final CardServiceManager cardServiceManager) {
+
         super(bankRepository);
         this.cardServiceManager = cardServiceManager;
     }
 
-    private double getAmount(String receiverCurrency, double value,
-                             String senderCurrency, ExchangeInput[] exchangeRates) {
+    private double getAmount(final String receiverCurrency, final double value,
+                             final String senderCurrency, final ExchangeInput[] exchangeRates) {
 
         if (!senderCurrency.equals(receiverCurrency)) {
-            CurrencyExchange currencyExchange = new CurrencyExchange(exchangeRates);
 
+            CurrencyExchange currencyExchange = new CurrencyExchange(exchangeRates);
             double rate = currencyExchange.findRate(senderCurrency, receiverCurrency);
-            double scale = Math.pow(10, 14);
+
+            final int scaleBase = 10;
+            final int scalePower = 14;
+            double scale = Math.pow(scaleBase, scalePower);
 
             return  ((Math.round((value * rate) * scale)) / scale);
         }
@@ -33,8 +47,8 @@ public class TransactionService extends BankRepositoryEntity {
         return value;
     }
 
-    private void pay(UserDetails user, AccountService account, CardDetails card,
-                     CommandInput cardDetails, double amount) {
+    private void pay(final UserDetails user, final AccountService account, final CardDetails card,
+                     final CommandInput cardDetails, final double amount) {
 
         BigDecimal firstValue = BigDecimal.valueOf(account.getBalance());
         BigDecimal secondValue = BigDecimal.valueOf(amount);
@@ -46,24 +60,39 @@ public class TransactionService extends BankRepositoryEntity {
                 "Card payment", amount, cardDetails.getCommerciant());
 
         user.getTransactions().add(cardPayment);
-        account.getCardPayments().add(cardPayment);
+
+        if (account.getAccountType().equals("classic")) {
+            ((ClassicAccount) account).getCardPayments().add(cardPayment);
+        }
 
         if (card.getType().equals("one time card")) {
             cardServiceManager.replaceCard(user, account, card, cardDetails.getTimestamp());
         }
     }
 
-    public PayOnlineOutput payOnline(CommandInput cardDetails, ExchangeInput[] exchangeRates) {
+    /**
+     * Aceasta metoda genereaza o plata cu cardul
+     *
+     * @param cardDetails detaliile platii
+     * @param exchangeRates cursurile de schimb valutar
+     * @return
+     */
+    public PayOnlineOutput payOnline(final CommandInput cardDetails,
+                                     final ExchangeInput[] exchangeRates) {
+
         CardDetails card = bankRepository.findCardByNumber(cardDetails.getCardNumber());
 
-        if (card == null)
+        if (card == null) {
             return new PayOnlineOutput(cardDetails.getTimestamp());
+        }
 
         UserDetails user = bankRepository.findUser(cardDetails.getEmail());
 
         if (card.getCardStatus().equals("frozen")) {
+
             user.getTransactions().add(new Transaction(cardDetails.getTimestamp(),
                     "The card is frozen"));
+
             return null;
         }
 
@@ -81,42 +110,52 @@ public class TransactionService extends BankRepositoryEntity {
         return null;
     }
 
-    private void send(CommandInput transferDetails, AccountService sender,
-                      AccountService receiver, UserDetails user) {
+    private void send(final CommandInput transferDetails, final AccountService sender,
+                      final AccountService receiver, final UserDetails user) {
 
         DecimalFormat df = new DecimalFormat("#.0");
         String money = df.format(transferDetails.getAmount()) + " " + sender.getCurrency();
 
         MoneyTransfer moneySent = new MoneyTransfer(transferDetails.getTimestamp(),
-                transferDetails.getDescription(), sender.getIBAN(),
-                receiver.getIBAN(), money, "sent");
+                transferDetails.getDescription(), sender.getIban(),
+                receiver.getIban(), money, "sent");
 
         sender.setBalance(sender.getBalance() - transferDetails.getAmount());
         user.getTransactions().add(moneySent);
     }
 
-    private void receive(CommandInput transferDetails, AccountService sender,
-                         AccountService receiver, UserDetails user, double amount) {
+    private void receive(final CommandInput transferDetails, final AccountService sender,
+                         final AccountService receiver, final UserDetails user,
+                         final double amount) {
 
         String money = amount + " " + receiver.getCurrency();
 
         MoneyTransfer moneyReceived = new MoneyTransfer(transferDetails.getTimestamp(),
-                transferDetails.getDescription(), sender.getIBAN(),
-                receiver.getIBAN(), money, "received");
+                transferDetails.getDescription(), sender.getIban(),
+                receiver.getIban(), money, "received");
 
         receiver.setBalance(receiver.getBalance() + amount);
         user.getTransactions().add(moneyReceived);
     }
 
-    public void sendMoney(CommandInput transferDetails, ExchangeInput[] exchangeRates) {
-        if (!transferDetails.getAccount().startsWith("RO"))
+    /**
+     * Aceasta metoda face un transfer bancar
+     *
+     * @param transferDetails detaliile pentru transferul bancar
+     * @param exchangeRates cursurile de schimb valutar
+     */
+    public void sendMoney(final CommandInput transferDetails, final ExchangeInput[] exchangeRates) {
+
+        if (!transferDetails.getAccount().startsWith("RO")) {
             return;
+        }
 
         AccountService sender = bankRepository.findAccountByIBAN(transferDetails.getAccount());
         AccountService receiver = bankRepository.findAccountByIBAN(transferDetails.getReceiver());
 
-        if (sender == null || receiver == null)
+        if (sender == null || receiver == null) {
             return;
+        }
 
         UserDetails u1 = bankRepository.findUserByAccount(sender);
         UserDetails u2 = bankRepository.findUserByAccount(receiver);
@@ -125,49 +164,65 @@ public class TransactionService extends BankRepositoryEntity {
                 sender.getCurrency(), exchangeRates);
 
         if (sender.getBalance() >= transferDetails.getAmount()) {
+
             send(transferDetails, sender, receiver, u1);
             receive(transferDetails, sender, receiver, u2, amount);
+
         } else {
+
             u1.getTransactions().add(new Transaction(transferDetails.getTimestamp(),
                     "Insufficient funds"));
         }
     }
 
-    private ArrayList<AccountService> getAccounts(List<String> IBANs) {
+    private ArrayList<AccountService> getAccounts(final List<String> ibans) {
+
         ArrayList<AccountService> accounts = new ArrayList<>();
 
-        for (String IBAN : IBANs) {
-            accounts.add(bankRepository.findAccountByIBAN(IBAN));
+        for (String iban : ibans) {
+            accounts.add(bankRepository.findAccountByIBAN(iban));
         }
 
         return accounts;
     }
 
-    private String isPaymentValid(ArrayList<AccountService> accounts, double amount,
-                                  String currency, ExchangeInput[] exchangeRates) {
+    private String isPaymentValid(final ArrayList<AccountService> accounts, final double amount,
+                                  final String currency, final ExchangeInput[] exchangeRates) {
 
-        String IBAN = null;
+        String iban = null;
 
         for (AccountService a : accounts) {
+
             double value = getAmount(a.getCurrency(), amount, currency, exchangeRates);
+
             if (a.getBalance() < value) {
-                IBAN =  a.getIBAN();
+                iban =  a.getIban();
             }
         }
 
-        return IBAN;
+        return iban;
     }
 
-    private void setTransactionError(ArrayList<AccountService> accounts, int timestamp, String description,
-                                     SplitPaymentFormat payment, String IBAN) {
+    private void setTransactionError(final ArrayList<AccountService> accounts,
+                                     final int timestamp, final String description,
+                                     final SplitPaymentFormat payment, final String iban) {
 
         for (AccountService a : accounts) {
             UserDetails user = bankRepository.findUserByAccount(a);
-            user.getTransactions().add(new SplitPaymentError(timestamp, description, payment, IBAN));
+            user.getTransactions()
+                    .add(new SplitPaymentError(timestamp, description, payment, iban));
         }
     }
 
-    public void splitPayment(CommandInput paymentDetails, ExchangeInput[] exchangeRates) {
+    /**
+     * Aceasta functie face o plata distribuita
+     *
+     * @param paymentDetails detaliile platii
+     * @param exchangeRates cursurile de schimb valutar
+     */
+    public void splitPayment(final CommandInput paymentDetails,
+                             final ExchangeInput[] exchangeRates) {
+
         double valuePerPerson = paymentDetails.getAmount() / paymentDetails.getAccounts().size();
         ArrayList<AccountService> accounts = getAccounts(paymentDetails.getAccounts());
 
@@ -183,11 +238,15 @@ public class TransactionService extends BankRepositoryEntity {
                 paymentDetails.getCurrency(), exchangeRates);
 
         if (isValid != null) {
-            setTransactionError(accounts, paymentDetails.getTimestamp(), description, payment, isValid);
+
+            setTransactionError(accounts, paymentDetails.getTimestamp(),
+                                description, payment, isValid);
+
             return;
         }
 
         for (AccountService a : accounts) {
+
             double amount = getAmount(a.getCurrency(), valuePerPerson,
                     paymentDetails.getCurrency(), exchangeRates);
 

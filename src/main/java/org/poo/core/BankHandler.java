@@ -9,15 +9,17 @@ import org.poo.models.UserDetails;
 import java.util.ArrayList;
 
 @Data
-public class BankHandler implements IBankHandler {
-    protected ArrayList<UserDetails> users;
-    protected BankRepository bankRepository;
+public final class BankHandler implements IBankHandler {
+
+    private ArrayList<UserDetails> users;
+    private BankRepository bankRepository;
     private AccountServiceManager accountServiceManager;
     private CardServiceManager cardServiceManager;
     private TransactionService transactionService;
     private ReportingService reportingService;
 
-    public BankHandler(ArrayList<UserDetails> users, BankRepository bankRepository) {
+    public BankHandler(final ArrayList<UserDetails> users, final BankRepository bankRepository) {
+
         this.users = users;
         this.bankRepository = bankRepository;
         this.accountServiceManager = new AccountServiceManager(bankRepository);
@@ -27,68 +29,74 @@ public class BankHandler implements IBankHandler {
     }
 
     @Override
-    public void addAccount(CommandInput accountDetails) {
+    public void addAccount(final CommandInput accountDetails) {
         accountServiceManager.add(accountDetails);
     }
 
     @Override
-    public String deleteAccount(CommandInput accountDetails) {
+    public String deleteAccount(final CommandInput accountDetails) {
         accountServiceManager.delete(accountDetails);
         return accountServiceManager.getError();
     }
 
     @Override
-    public void addFunds(CommandInput fundsDetails) {
+    public void addFunds(final CommandInput fundsDetails) {
         accountServiceManager.addFunds(fundsDetails);
     }
 
     @Override
-    public void setMinBalance(CommandInput balanceInput) {
+    public void setMinBalance(final CommandInput balanceInput) {
         accountServiceManager.setMinBalance(balanceInput);
     }
 
     @Override
-    public void setAlias(CommandInput aliasDetails) {
+    public void setAlias(final CommandInput aliasDetails) {
         accountServiceManager.setAlias(aliasDetails);
     }
 
     @Override
-    public int addInterest(CommandInput interestDetails) {
+    public int addInterest(final CommandInput interestDetails) {
         return accountServiceManager.addInterest(interestDetails);
     }
 
     @Override
-    public int changeInterestRate(CommandInput interestDetails) {
+    public int changeInterestRate(final CommandInput interestDetails) {
         return accountServiceManager.changeInterestRate(interestDetails);
     }
 
     @Override
-    public void addCard(CommandInput cardDetails) {
+    public void addCard(final CommandInput cardDetails) {
         cardServiceManager.add(cardDetails);
     }
 
     @Override
-    public void deleteCard(CommandInput cardDetails) {
+    public void deleteCard(final CommandInput cardDetails) {
         cardServiceManager.delete(cardDetails);
     }
 
     @Override
-    public PayOnlineOutput payOnline(CommandInput cardDetails, ExchangeInput[] exchangeRates) {
+    public PayOnlineOutput payOnline(final CommandInput cardDetails,
+                                     final ExchangeInput[] exchangeRates) {
+
         return transactionService.payOnline(cardDetails, exchangeRates);
     }
 
     @Override
-    public void sendMoney(CommandInput transferDetails, ExchangeInput[] exchangeRates) {
+    public void sendMoney(final CommandInput transferDetails,
+                          final ExchangeInput[] exchangeRates) {
+
         transactionService.sendMoney(transferDetails, exchangeRates);
     }
 
     @Override
-    public void splitPayment(CommandInput paymentDetails, ExchangeInput[] exchangeRates) {
+    public void splitPayment(final CommandInput paymentDetails,
+                             final ExchangeInput[] exchangeRates) {
+
         transactionService.splitPayment(paymentDetails, exchangeRates);
     }
 
     @Override
-    public Report generateReport(CommandInput reportDetails) {
+    public Report generateReport(final CommandInput reportDetails) {
         return reportingService.generateReport(reportDetails);
     }
 }

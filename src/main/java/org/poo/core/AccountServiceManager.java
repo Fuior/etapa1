@@ -3,36 +3,49 @@ package org.poo.core;
 import lombok.Getter;
 import org.poo.fileio.CommandInput;
 import org.poo.models.AccountService;
+import org.poo.models.ClassicAccount;
+import org.poo.models.SavingAccount;
 import org.poo.models.Transaction;
 import org.poo.models.UserDetails;
 
 @Getter
-public class AccountServiceManager extends BankRepositoryEntity implements ResourceManager {
+public final class AccountServiceManager extends BankRepositoryEntity implements ResourceManager {
+
     private String error;
 
-    public AccountServiceManager(BankRepository bankRepository) {
+    public AccountServiceManager(final BankRepository bankRepository) {
+
         super(bankRepository);
         error = null;
     }
 
-    public void add(CommandInput accountDetails) {
+    @Override
+    public void add(final CommandInput accountDetails) {
+
         UserDetails user = bankRepository.findUser(accountDetails.getEmail());
+        AccountService bankAccount;
 
-        AccountService bankAccount = new AccountService(accountDetails.getCurrency(),
-                accountDetails.getAccountType(), accountDetails.getTimestamp());
+        if (accountDetails.getAccountType().equals("savings")) {
+            bankAccount = new SavingAccount(accountDetails.getCurrency(),
+                    accountDetails.getAccountType(), accountDetails.getTimestamp());
 
-        if (accountDetails.getAccountType().equals("savings"))
-            bankAccount.setInterestRate(accountDetails.getInterestRate());
+            ((SavingAccount) bankAccount).setInterestRate(accountDetails.getInterestRate());
+        } else {
+            bankAccount = new ClassicAccount(accountDetails.getCurrency(),
+                    accountDetails.getAccountType(), accountDetails.getTimestamp());
+        }
 
         user.getBankAccounts().add(bankAccount);
         user.getTransactions().add(new Transaction(accountDetails.getTimestamp(),
                 "New account created"));
 
         bankRepository.addAccount(bankAccount);
-        bankRepository.addUserByAccount(user, bankAccount.getIBAN());
+        bankRepository.addUserByAccount(user, bankAccount.getIban());
     }
 
-    public void delete(CommandInput accountDetails) {
+    @Override
+    public void delete(final CommandInput accountDetails) {
+
         AccountService bankAccount = bankRepository.findAccountByIBAN(accountDetails.getAccount());
 
         String message = "Account couldn't be deleted - see org.poo.transactions for details";
@@ -45,6 +58,7 @@ public class AccountServiceManager extends BankRepositoryEntity implements Resou
         UserDetails user = bankRepository.findUserByAccount(bankAccount);
 
         if (bankAccount.getBalance() != 0) {
+
             user.getTransactions().add(new Transaction(accountDetails.getTimestamp(),
                     "Account couldn't be deleted - there are funds remaining"));
 
@@ -53,32 +67,53 @@ public class AccountServiceManager extends BankRepositoryEntity implements Resou
         }
 
         bankRepository.deleteUser(bankAccount);
-        bankRepository.deleteAccount(bankAccount.getIBAN());
+        bankRepository.deleteAccount(bankAccount.getIban());
 
-        if (user.getAlias() != null && user.getAlias().account() == bankAccount)
+        if ((user.getAlias() != null) && (user.getAlias().account() == bankAccount)) {
             bankRepository.deleteAccount(user.getAlias().name());
+        }
 
         bankAccount.getCards().clear();
-        user.getBankAccounts().removeIf(a -> a.getIBAN().equals(bankAccount.getIBAN()));
+        user.getBankAccounts().removeIf(a -> a.getIban().equals(bankAccount.getIban()));
     }
 
-    public void addFunds(CommandInput fundsDetails) {
+    /**
+     * Aceasta metoda adauga fonduri intr-un cont
+     *
+     * @param fundsDetails datele contului si valoare fondurilor
+     */
+    public void addFunds(final CommandInput fundsDetails) {
+
         AccountService account = bankRepository.findAccountByIBAN(fundsDetails.getAccount());
 
-        if (account != null)
+        if (account != null) {
             account.setBalance(account.getBalance() + fundsDetails.getAmount());
+        }
     }
 
-    public void setMinBalance(CommandInput balanceInput) {
+    /**
+     * Aceasta metoda seteaza o balanta minima pentru un cont
+     *
+     * @param balanceInput datele actiunii
+     */
+    public void setMinBalance(final CommandInput balanceInput) {
+
         AccountService account = bankRepository.findAccountByIBAN(balanceInput.getAccount());
 
-        if (account == null)
+        if (account == null) {
             return;
+        }
 
         account.setMinBalance(balanceInput.getAmount());
     }
 
-    public void setAlias(CommandInput aliasDetails) {
+    /**
+     * Aceasta metoda seteaza un alias pentru un cont
+     *
+     * @param aliasDetails datele actiunii
+     */
+    public void setAlias(final CommandInput aliasDetails) {
+
         UserDetails user = bankRepository.findUser(aliasDetails.getEmail());
         AccountService account = bankRepository.findAccountByIBAN(aliasDetails.getAccount());
 
@@ -86,32 +121,51 @@ public class AccountServiceManager extends BankRepositoryEntity implements Resou
         bankRepository.addAccountByAlias(account, aliasDetails.getAlias());
     }
 
-    public int addInterest(CommandInput interestDetails) {
+    /**
+     * Aceasta metoda genereaza incasarea dobanzii
+     *
+     * @param interestDetails datele contului care incaseaza dobanda
+     * @return valoarea de succes a acestei actiuni
+     */
+    public int addInterest(final CommandInput interestDetails) {
+
         AccountService accout = bankRepository.findAccountByIBAN(interestDetails.getAccount());
 
-        if (accout == null)
+        if (accout == null) {
             return 0;
+        }
 
-        if (accout.getAccountType().equals("classic"))
+        if (accout.getAccountType().equals("classic")) {
             return -1;
+        }
 
-        double interest = accout.getBalance() * accout.getInterestRate();
+        double interest = accout.getBalance() * ((SavingAccount) accout).getInterestRate();
         accout.setBalance(accout.getBalance() + interest);
 
         return 0;
     }
 
-    public int changeInterestRate(CommandInput interestDetails) {
+    /**
+     * Aceasta metoda schimba dobanda unui cont
+     *
+     * @param interestDetails detaliile contului si valoarea dobanzii
+     * @return valoarea de succes a acestei actiuni
+     */
+    public int changeInterestRate(final CommandInput interestDetails) {
+
         AccountService accout = bankRepository.findAccountByIBAN(interestDetails.getAccount());
 
-        if (accout == null)
+        if (accout == null) {
             return 0;
+        }
 
-        if (accout.getAccountType().equals("classic"))
+        if (accout.getAccountType().equals("classic")) {
             return -1;
+        }
 
-        accout.setInterestRate(interestDetails.getInterestRate());
-        String description = "Interest rate of the account changed to " + accout.getInterestRate();
+        ((SavingAccount) accout).setInterestRate(interestDetails.getInterestRate());
+        String description = "Interest rate of the account changed to "
+                            + ((SavingAccount) accout).getInterestRate();
 
         UserDetails user = bankRepository.findUserByAccount(accout);
         user.getTransactions().add(new Transaction(interestDetails.getTimestamp(), description));

@@ -2,20 +2,29 @@ package org.poo.core;
 
 import org.poo.fileio.ExchangeInput;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-public class CurrencyExchange {
+
+public final class CurrencyExchange {
+
     private final Map<String, List<Pair<String, Double>>> exchangeGraph;
 
-    public CurrencyExchange(ExchangeInput[] exchangeRates) {
+    public CurrencyExchange(final ExchangeInput[] exchangeRates) {
         exchangeGraph = new HashMap<>();
         buildGraph(exchangeRates);
     }
 
-    private record Pair<K, V>(K key, V value) {}
+    private record Pair<K, V>(K key, V value) { }
 
-    private void buildGraph(ExchangeInput[] exchangeRates) {
+    private void buildGraph(final ExchangeInput[] exchangeRates) {
+
         for (ExchangeInput rate : exchangeRates) {
+
             exchangeGraph.computeIfAbsent(rate.getFrom(), k -> new ArrayList<>())
                     .add(new Pair<>(rate.getTo(), rate.getRate()));
 
@@ -24,16 +33,27 @@ public class CurrencyExchange {
         }
     }
 
-    public double findRate(String from, String to) {
+    /**
+     * Aceasta metoda calculeaza cursul de schimb valutar
+     *
+     * @param from moneda pe care vrem sa o schimbam
+     * @param to moneda in care vrem sa schimbam
+     * @return cursul de schimb valutar
+     */
+    public double findRate(final String from, final String to) {
+
         if (!exchangeGraph.containsKey(from) || !exchangeGraph.containsKey(to)) {
             return -1;
         }
 
         Set<String> visited = new HashSet<>();
+
         return dfs(from, to, 1.0, visited);
     }
 
-    private double dfs(String current, String target, double accumulatedRate, Set<String> visited) {
+    private double dfs(final String current, final String target,
+                       final double accumulatedRate, final Set<String> visited) {
+
         if (current.equals(target)) {
             return accumulatedRate;
         }
@@ -41,9 +61,12 @@ public class CurrencyExchange {
         visited.add(current);
 
         for (Pair<String, Double> neighbor : exchangeGraph.get(current)) {
+
             if (!visited.contains(neighbor.key())) {
-                double rate = dfs(neighbor.key(), target,
-                        accumulatedRate * neighbor.value(), visited);
+
+                double newAcumulatedRate = accumulatedRate * neighbor.value();
+                double rate = dfs(neighbor.key(), target, newAcumulatedRate, visited);
+
                 if (rate != -1) {
                     return rate;
                 }

@@ -4,11 +4,12 @@ import lombok.Getter;
 
 @Getter
 public class CardPaymentFormat extends Transaction {
-    private final double amount;
-    private final String commerciant;
 
-    public CardPaymentFormat(int timestamp, String description,
-                             double amount, String commerciant) {
+    private double amount;
+    private String commerciant;
+
+    public CardPaymentFormat(final int timestamp, final String description,
+                             final double amount, final String commerciant) {
 
         super(timestamp, description);
         this.amount = amount;

@@ -4,12 +4,13 @@ import lombok.Getter;
 
 @Getter
 public class CardActionsFormat extends Transaction {
-    private final String card;
-    private final String cardHolder;
-    private final String account;
 
-    public CardActionsFormat(int timestamp, String description,
-                             String card, String cardHolder, String account) {
+    private String card;
+    private String cardHolder;
+    private String account;
+
+    public CardActionsFormat(final int timestamp, final String description,
+                             final String card, final String cardHolder, final String account) {
 
         super(timestamp, description);
         this.card = card;

@@ -19,9 +19,9 @@ public final class Utils {
     private static Random cardRandom = new Random(CARD_SEED);
 
     /**
-     * Utility method for generating an IBAN code.
+     * Utility method for generating an iban code.
      *
-     * @return the IBAN as String
+     * @return the iban as String
      */
     public static String generateIBAN() {
         StringBuilder sb = new StringBuilder(RO_STR);

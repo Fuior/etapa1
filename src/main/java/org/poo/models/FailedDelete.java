@@ -1,3 +1,3 @@
 package org.poo.models;
 
-public record FailedDelete(String error, int timestamp) {}
+public record FailedDelete(String error, int timestamp) { }

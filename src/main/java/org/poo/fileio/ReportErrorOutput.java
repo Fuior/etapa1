@@ -4,11 +4,13 @@ import lombok.Getter;
 
 @Getter
 public class ReportErrorOutput {
-    private final String command;
-    private final ErrorOutput output;
-    private final int timestamp;
 
-    public ReportErrorOutput(String command, int timestamp) {
+    private String command;
+    private ErrorOutput output;
+    private int timestamp;
+
+    public ReportErrorOutput(final String command, final int timestamp) {
+
         this.command = command;
         this.output = new ErrorOutput("Account not found", timestamp);
         this.timestamp = timestamp;
